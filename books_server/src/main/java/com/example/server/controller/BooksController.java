@@ -35,11 +35,11 @@ public class BooksController {
     @PostMapping("upFile")
     public RespBean upFile(@RequestParam MultipartFile file) {
         String name = file.getOriginalFilename();
-        String type = name.substring(name.lastIndexOf(".")+1);
+        String type = name.substring(name.lastIndexOf(".") + 1);
         if (type.equals("txt") || type.equals("doc") || type.equals("epub")) {
             Map<String, String> map = new HashMap<>();
-            map.put("url",FdfsUtils.URL+FdfsUtils.upload(file));
-            map.put("name",name);
+            map.put("url", FdfsUtils.URL + FdfsUtils.upload(file));
+            map.put("name", name);
             return RespBean.success("上传成功", map);
         } else {
             return RespBean.error("上传类型错误,上传失败");
@@ -73,6 +73,17 @@ public class BooksController {
     @GetMapping("getAll")
     public RespBean getAll() {
         return RespBean.success("查询成功", booksMapper.selectList(null));
+    }
+
+    @PostMapping("update")
+    public RespBean update(@RequestBody Books books) {
+        Books book = booksMapper.selectById(books.getId());
+        book.setName(books.getName());
+        if (booksMapper.updateById(book) > 0) {
+            return RespBean.success("修改成功");
+        } else {
+            return RespBean.error("修改失败");
+        }
     }
 
     @GetMapping("likeAndPage/{name}")
