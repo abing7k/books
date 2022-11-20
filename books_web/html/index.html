@@ -26,10 +26,10 @@
                     type="selection"
                     width="55">
             </el-table-column>
-<!--            <el-table-column-->
-<!--                    label="日期"-->
-<!--                    width="120">-->
-<!--                <template slot-scope="scope">{{ scope.row.date }}</template>-->
+            <!--            <el-table-column-->
+            <!--                    label="日期"-->
+            <!--                    width="120">-->
+            <!--                <template slot-scope="scope">{{ scope.row.date }}</template>-->
             </el-table-column>
             <el-table-column
                     prop="name"
@@ -41,12 +41,26 @@
                     label="总下载量"
                     show-overflow-tooltip>
             </el-table-column>
+
+            <el-table-column label="操作">
+                <template slot-scope="scope">
+                    <el-button type="primary" @click="updateBrand(scope.row);">修改</el-button>
+                    <el-button type="danger" @click="deleteBrand(scope.row.id)">删除</el-button>
+
+                    <a :href="'http://localhost:8080/books/downFile/'+scope.row.id" download>
+                        <el-button type="info" >下载</el-button>
+                    </a>
+
+                </template>
+            </el-table-column>
         </el-table>
-        <div style="margin-top: 20px">
-            <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
-            <el-button @click="toggleSelection()">取消选择</el-button>
-        </div>
-    </template>
+        <div style=" margin-top: 20px
+                    ">
+                    <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态
+                    </el-button>
+                    <el-button @click="toggleSelection()">取消选择</el-button>
+</div>
+</template>
 </div>
 
 <script type="text/javascript">
@@ -57,7 +71,13 @@
         el: '#demo', //el用于指定当前Vue实例为哪个容器服务，值通常为css选择器字符串。
         data: { //data中用于存储数据，数据供el所指定的容器去使用，值我们暂时先写成一个对象。
             tableData: [],
+            downUrl:"",
         },
+        // computed:{
+        //     downUrl:{
+        //         return "http://localhost:8080/books/downFile/"+id;
+        //     }
+        // },
         methods: {
             // 展示列表数据
             selectAll() {
@@ -72,6 +92,9 @@
                     console.log(resp.data)
                     _this.tableData = resp.data.obj;
                 })
+            },
+            makeDownUrl(id) {
+                downUrl = "http://localhost:8080/books/downFile/"+id;
             },
             toggleSelection(rows) {
                 if (rows) {

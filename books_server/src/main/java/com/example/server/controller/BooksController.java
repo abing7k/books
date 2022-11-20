@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>
@@ -33,18 +35,20 @@ public class BooksController {
 
     @PostMapping("upFile")
     public RespBean upFile(@RequestParam MultipartFile file) {
-        String name = file.getName();
-        String type = name.substring(name.lastIndexOf("."));
+        String name = file.getOriginalFilename();
+        String type = name.substring(name.lastIndexOf(".")+1);
         if (type.equals("txt") || type.equals("doc") || type.equals("epub")) {
-            String upload = FdfsUtils.upload(file);
-            return RespBean.success("上传成功", FdfsUtils.URL + upload);
+            Map<String, String> map = new HashMap<>();
+            map.put("url",FdfsUtils.URL+FdfsUtils.upload(file));
+            map.put("name",name);
+            return RespBean.success("上传成功", map);
         } else {
             return RespBean.error("上传类型错误,上传失败");
         }
     }
 
-    @GetMapping("downFile")
-    public void downloadFile(Integer id, HttpServletResponse response) throws Exception {
+    @GetMapping("downFile/{id}")
+    public void downloadFile(@PathVariable("id") Integer id, HttpServletResponse response) throws Exception {
         booksService.downloadFile(id, response);
     }
 
