@@ -7,15 +7,56 @@
     <script type="text/javascript" src="../js/vue.js"></script>
     <!-- 引入axios -->
     <script type="text/javascript" src="../js/axios.js"></script>
+
     <!-- 引入样式 -->
-    <link rel="stylesheet" href="../css/element-ui.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <!-- 引入组件库 -->
-    <script src="../js/element-ui.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 </head>
 <body>
 
 <div id="demo">
     <template>
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+
+            <el-form-item label="书本名称">
+                <el-input v-model="formInline.name" placeholder="企业名称"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="selectQuery()">查询</el-button>
+            </el-form-item>
+        </el-form>
+
+        <!--新增-->
+        <div>
+            <el-button type="primary" plain @click="addFormVisible=true">新增</el-button>
+        </div>
+        <!--增加表格-->
+        <el-dialog title="添加" :visible.sync="addFormVisible">
+            <el-form :model="addForm">
+                <el-form-item>
+
+                    <el-upload
+                            class="upload-demo"
+                            drag
+                            action="http://localhost:8080/books/upFile"
+                            multiple
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload"
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    </el-upload>
+                </el-form-item>
+
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="addFormVisible  = false">取 消</el-button>
+                <el-button type="primary" @click="addExecute()">确 定</el-button>
+            </div>
+        </el-dialog>
+
+
         <el-table
                 ref="multipleTable"
                 :data="tableData"
@@ -44,23 +85,16 @@
 
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <el-button type="primary" @click="updateBrand(scope.row);">修改</el-button>
-                    <el-button type="danger" @click="deleteBrand(scope.row.id)">删除</el-button>
-
+                    <el-button type="primary" @click="updateBook(scope.row);">修改</el-button>
+                    <el-button type="danger" @click="deleteBook(scope.row.id)">删除</el-button>
                     <a :href="'http://localhost:8080/books/downFile/'+scope.row.id" download>
-                        <el-button type="info" >下载</el-button>
+                        <el-button type="info">下载</el-button>
                     </a>
-
                 </template>
             </el-table-column>
         </el-table>
-        <div style=" margin-top: 20px
-                    ">
-                    <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态
-                    </el-button>
-                    <el-button @click="toggleSelection()">取消选择</el-button>
-</div>
-</template>
+
+    </template>
 </div>
 
 <script type="text/javascript">
@@ -71,13 +105,16 @@
         el: '#demo', //el用于指定当前Vue实例为哪个容器服务，值通常为css选择器字符串。
         data: { //data中用于存储数据，数据供el所指定的容器去使用，值我们暂时先写成一个对象。
             tableData: [],
-            downUrl:"",
+            downUrl: "",
+            formInline: {
+                name: "",
+            },
+            addFormVisible: false,
+            addForm: {
+                name: "",
+                url: "",
+            },
         },
-        // computed:{
-        //     downUrl:{
-        //         return "http://localhost:8080/books/downFile/"+id;
-        //     }
-        // },
         methods: {
             // 展示列表数据
             selectAll() {
@@ -93,8 +130,56 @@
                     _this.tableData = resp.data.obj;
                 })
             },
-            makeDownUrl(id) {
-                downUrl = "http://localhost:8080/books/downFile/"+id;
+            selectQuery() {
+                let _this = this;
+                axios({
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    method: "get",
+                    url: "http://localhost:8080/books/likeAndPage/" + _this.formInline.name
+                }).then(function (resp) {
+                    console.log(resp.data)
+                    _this.tableData = resp.data.obj;
+                })
+            },
+            deleteBook(id) {
+                let _this = this;
+                axios({
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    method: "delete",
+                    url: "http://localhost:8080/books/delete?id=" + id
+                }).then(() => {
+                        _this.selectQuery()
+                    }
+                )
+            },
+            addExecute() {
+                axios({
+                    method: "post",
+                    url: "http://localhost:8080/books/add",
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                    },
+                    data: this.addForm
+                }).then(() => {
+                    this.addFormVisible = false
+                    this.selectAll();
+                })
+            },
+            beforeAvatarUpload(file) {
+
+            },
+            handleAvatarSuccess(res, file) {
+                console.log("上传成功");
+                if (res.code == 200) {
+                    this.addForm.url = res.obj.url
+                    this.addForm.name = res.obj.name
+                } else {
+                    this.$message.error(res.messges);
+                }
             },
             toggleSelection(rows) {
                 if (rows) {

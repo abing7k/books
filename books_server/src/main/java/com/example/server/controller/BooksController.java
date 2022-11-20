@@ -25,7 +25,6 @@ import java.util.Map;
  * @since 2022-11-20
  */
 @RestController
-@CrossOrigin
 @RequestMapping("/books")
 public class BooksController {
     @Autowired
@@ -82,6 +81,13 @@ public class BooksController {
         booksQueryWrapper.like("name", name);
         return RespBean.success("查询成功", booksMapper.selectList(booksQueryWrapper));
     }
+
+
+    @GetMapping("likeAndPage")
+    public RespBean likeDefault() {
+        return RespBean.success("查询成功", booksMapper.selectList(null));
+    }
+
 
     @GetMapping("likeAndPage/{page}/{size}")
     public RespBean page(@PathVariable("page") Integer page,
