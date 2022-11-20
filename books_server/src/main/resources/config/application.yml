@@ -7,27 +7,12 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 
-#  redis:
-#    timeout: 10000ms
-#    host: local.redis.com
-#    port: 6379
-#    database: 0 # 选择哪个库，默认0库
-#    password: foobared
-#    lettuce:
-#      pool:
-#        max-active: 1024 # 最大连接数，默认 8
-#        max-wait: 10000ms # 最大连接阻塞等待时间，单位毫秒，默认 -1
-#        max-idle: 200 # 最大空闲连接，默认 8
-#        min-idle: 5
-
-
-
   # 数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.99.49.255:3307/acesys?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    username: acesys
-    password: acesys123456
+    url: jdbc:mysql://127.0.0.1:3306/books?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
     hikari:
       # 连接池名
       pool-name: DateHikariCP
@@ -61,16 +46,4 @@ mybatis-plus:
 logging:
   level:
     com.example.server.mapper: debug
-
-jwt:
-  # JWT存储的请求头
-  tokenHeader: Authorization
-  # JWT 加解密使用的密钥
-  secret: yeb-secret
-  # JWT的超期限时间（60*60*24）
-  expiration: 604800
-  # JWT 负载中拿到开头
-  tokenHead: Bearer
-
-
 

@@ -1,7 +1,11 @@
 package com.example.server.service;
 
-import com.example.server.pojo.Books;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.server.pojo.Books;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * <p>
@@ -13,4 +17,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IBooksService extends IService<Books> {
 
+    void downloadFile(Integer id, HttpServletResponse response) throws IOException;
 }

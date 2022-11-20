@@ -8,12 +8,16 @@
         <result column="name" property="name" />
         <result column="url" property="url" />
         <result column="down_sum" property="downSum" />
-        <result column="delete" property="delete" />
+        <result column="del_flg" property="delFlg" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, name, url, down_sum, delete
     </sql>
+
+    <update id="updateDownSumById" parameterType="map">
+        update books set down_sum = #{downSum} where id = #{id}
+    </update>
 
 </mapper>

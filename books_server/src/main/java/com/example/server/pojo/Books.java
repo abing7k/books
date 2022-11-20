@@ -1,12 +1,15 @@
 package com.example.server.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -24,6 +27,7 @@ public class Books implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private String name;
@@ -31,9 +35,10 @@ public class Books implements Serializable {
     private String url;
 
     @TableField("down_sum")
-    private Float downSum;
+    private Integer downSum;
 
-    private Integer delete;
-
+    @TableField("del_flg")
+    @TableLogic
+    private Integer delFlg;
 
 }

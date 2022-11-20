@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @PROJECT_NAME: yeb-java
+ * @PROJECT_NAME:
  * @DESCRIPTION:
  * @USER: 韩冰
- * @DATE: 2022/7/31 0031 22:04
+ * @DATE:
  */
 @Configuration
 @EnableSwagger2
@@ -37,9 +37,9 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Acesys接口文档")
-                .description("Acesys接口文档")
-                .contact(new Contact("Nakupenda", "https:ip:8081/doc.html", "hanbing742608@gmail.com"))
+                .title("Books接口文档")
+                .description("Books接口文档")
+                .contact(new Contact("韩冰", "https:ip:8080/doc.html", "hanbing742608@gmail.com"))
                 .version("1.0")
                 .build();
     }

@@ -1,38 +1,25 @@
 package com.example;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Unit test for simple App.
  */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class AppTest {
+    @Test
+    public void test01(){
+        String a = "http://110.40.220.17:18001/group1/M00/00/00/CgAMDWN5xHqAcq5EAAAAXc0MG5Q975.txt";
+        System.out.println(a.substring(a.lastIndexOf("M00/00/00/")));
     }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+    @Test
+    public void test02(){
+        String name = "sdadddfs.txt";
+        System.out.println(name.substring(name.lastIndexOf(".")));
     }
 }
+
