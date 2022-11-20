@@ -185,7 +185,7 @@
                     method: "delete",
                     url: "http://localhost:8080/books/delete?id=" + id
                 }).then(() => {
-                        _this.selectQuery()
+                        _this.handleCurrentChange(_this.currentPage)
                     }
                 )
             },
@@ -199,7 +199,7 @@
                     data: this.addForm
                 }).then(() => {
                     this.addFormVisible = false
-                    this.selectQuery()
+                    this._this.handleCurrentChange(_this.currentPage)
                 })
             },
 
@@ -218,7 +218,7 @@
                     data: this.updateForm
                 }).then(() => {
                     this.updateFormVisible = false
-                    this.selectQuery()
+                    this._this.handleCurrentChange(_this.currentPage)
                 })
             },
             beforeAvatarUpload(file) {
@@ -278,7 +278,7 @@
             }
         },
         mounted() {
-            this.selectAll()
+            this.handleCurrentChange(1)
         }
     })
 
