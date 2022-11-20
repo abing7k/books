@@ -17,10 +17,10 @@
 
 <div id="demo">
     <template>
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form :inline="true" :model="dataLike" class="demo-form-inline">
 
             <el-form-item label="书本名称">
-                <el-input v-model="formInline.name" placeholder="企业名称"></el-input>
+                <el-input v-model="dataLike.name" placeholder="企业名称"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="selectQuery()">查询</el-button>
@@ -132,7 +132,8 @@
         data: { //data中用于存储数据，数据供el所指定的容器去使用，值我们暂时先写成一个对象。
             tableData: [],
             downUrl: "",
-            formInline: {
+            
+            dataLike: {
                 name: "",
             },
             addFormVisible: false,
@@ -165,15 +166,16 @@
             },
             selectQuery() {
                 let _this = this;
-                axios({
-                    headers: {
-                        'Content-Type': 'application/json;charset=UTF-8'
-                    },
-                    method: "get",
-                    url: "http://localhost:8080/books/likeAndPage/" + _this.formInline.name
-                }).then(function (resp) {
-                    _this.tableData = resp.data.obj;
-                })
+                axios.get(`http://localhost:8080/books/likeAndPage/${_this.dataLike.name}/${_this.currentPage}/${_this.pageSize}`).then((res) => {
+                    console.log(res)
+                    var data = res.data;
+                    if (data.code == 200) {
+                        this.tableData = data.obj.records
+                        this.total = data.obj.total
+                    } else {
+                        this.$message.error(data.messges)
+                    }
+                });
             },
 
             deleteBook(id) {
